@@ -1,46 +1,101 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Number Checker</title>
-    <style>
-        body {
-            font-family: Arial;
-            text-align: center;
-            margin-top: 100px;
-        }
-        input {
-            padding: 10px;
-            width: 250px;
-            font-size: 16px;
-        }
-        button {
-            padding: 10px;
-            font-size: 16px;
-            margin-left: 10px;
-        }
-        h2 {
-            margin-top: 20px;
-        }
-    </style>
+<meta charset="UTF-8">
+<title>Smart Input Analyzer</title>
+
+<style>
+    body {
+        font-family: 'Segoe UI', sans-serif;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0;
+    }
+
+    .container {
+        background: white;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        text-align: center;
+        width: 350px;
+    }
+
+    h1 {
+        margin-bottom: 5px;
+    }
+
+    .author {
+        font-size: 12px;
+        color: gray;
+        margin-bottom: 20px;
+    }
+
+    input {
+        width: 90%;
+        padding: 12px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        margin-bottom: 15px;
+        font-size: 16px;
+    }
+
+    button {
+        background: #667eea;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    button:hover {
+        background: #5a67d8;
+    }
+
+    .result {
+        margin-top: 20px;
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+    .valid {
+        color: green;
+    }
+
+    .invalid {
+        color: red;
+    }
+</style>
 </head>
+
 <body>
 
-<h1>Input Checker</h1>
+<div class="container">
+    <h1>Smart Input Analyzer</h1>
+    <div class="author">By Swingly Moningka</div>
 
-<input type="text" id="input" placeholder="Enter something...">
-<button onclick="checkInput()">Check</button>
+    <input type="text" id="input" placeholder="Enter your input...">
+    <br>
+    <button onclick="checkInput()">Analyze</button>
 
-<h2 id="result"></h2>
+    <div class="result" id="result"></div>
+</div>
 
 <script>
 function checkInput() {
     let value = document.getElementById("input").value;
 
-    // cek apakah angka
     if (!isNaN(value) && value.trim() !== "") {
-        document.getElementById("result").innerText = "NUMBER";
+        document.getElementById("result").innerText = "✅ Valid Number";
+        document.getElementById("result").className = "result valid";
     } else {
-        document.getElementById("result").innerText = "NOT A NUMBER";
+        document.getElementById("result").innerText = "❌ Invalid Input";
+        document.getElementById("result").className = "result invalid";
     }
 }
 </script>
