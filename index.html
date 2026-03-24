@@ -2,12 +2,12 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Smart Input Analyzer</title>
+<title>Input Validator</title>
 
 <style>
     body {
         font-family: 'Segoe UI', sans-serif;
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #89f7fe, #66a6ff);
         height: 100vh;
         display: flex;
         justify-content: center;
@@ -16,59 +16,66 @@
     }
 
     .container {
-        background: white;
-        padding: 30px;
-        border-radius: 15px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        background: #ffffff;
+        padding: 35px;
+        border-radius: 16px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.15);
         text-align: center;
-        width: 350px;
+        width: 360px;
     }
 
     h1 {
         margin-bottom: 5px;
+        color: #333;
     }
 
     .author {
-        font-size: 12px;
-        color: gray;
+        font-size: 13px;
+        color: #666;
         margin-bottom: 20px;
     }
 
     input {
         width: 90%;
         padding: 12px;
-        border-radius: 8px;
+        border-radius: 10px;
         border: 1px solid #ccc;
         margin-bottom: 15px;
-        font-size: 16px;
+        font-size: 15px;
+        outline: none;
+    }
+
+    input:focus {
+        border-color: #66a6ff;
     }
 
     button {
-        background: #667eea;
+        background: #66a6ff;
         color: white;
         border: none;
-        padding: 10px 20px;
-        border-radius: 8px;
+        padding: 10px 22px;
+        border-radius: 10px;
         cursor: pointer;
-        font-size: 16px;
+        font-size: 15px;
+        transition: 0.2s;
     }
 
     button:hover {
-        background: #5a67d8;
+        background: #4d8df5;
     }
 
     .result {
         margin-top: 20px;
-        font-size: 20px;
-        font-weight: bold;
+        font-size: 18px;
+        font-weight: 500;
     }
 
     .valid {
-        color: green;
+        color: #2e7d32;
     }
 
     .invalid {
-        color: red;
+        color: #c62828;
     }
 </style>
 </head>
@@ -76,12 +83,12 @@
 <body>
 
 <div class="container">
-    <h1>Smart Input Analyzer</h1>
-    <div class="author">By Swingly Moningka</div>
+    <h1>Input Validator</h1>
+    <div class="author">Swingly Moningka - 241011060046</div>
 
-    <input type="text" id="input" placeholder="Enter your input...">
+    <input type="text" id="input" placeholder="Type something here...">
     <br>
-    <button onclick="checkInput()">Analyze</button>
+    <button onclick="checkInput()">Check</button>
 
     <div class="result" id="result"></div>
 </div>
@@ -91,10 +98,10 @@ function checkInput() {
     let value = document.getElementById("input").value;
 
     if (!isNaN(value) && value.trim() !== "") {
-        document.getElementById("result").innerText = "✅ Valid Number";
+        document.getElementById("result").innerText = "This is a number.";
         document.getElementById("result").className = "result valid";
     } else {
-        document.getElementById("result").innerText = "❌ Invalid Input";
+        document.getElementById("result").innerText = "This is not a number.";
         document.getElementById("result").className = "result invalid";
     }
 }
