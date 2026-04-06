@@ -9,26 +9,62 @@
         font-family: 'Segoe UI', sans-serif;
         background: linear-gradient(135deg, #1a1a1a, #eaeaea);
         height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
         margin: 0;
+    }
+
+    /* NAVBAR */
+    .navbar {
+        background: #111;
+        color: white;
+        padding: 10px;
+        display: flex;
+        gap: 20px;
+    }
+
+    .menu {
+        cursor: pointer;
+        position: relative;
+    }
+
+    .dropdown {
+        display: none;
+        position: absolute;
+        background: white;
+        color: black;
+        top: 30px;
+        left: 0;
+        border-radius: 8px;
+        box-shadow: 0 5px 10px rgba(0,0,0,0.2);
         overflow: hidden;
     }
 
+    .dropdown div {
+        padding: 10px 15px;
+        cursor: pointer;
+    }
+
+    .dropdown div:hover {
+        background: #eee;
+    }
+
+    .menu:hover .dropdown {
+        display: block;
+    }
+
+    /* MAIN UI */
     .container {
-        background: #ffffff;
+        background: white;
         padding: 35px;
         border-radius: 16px;
         text-align: center;
         width: 360px;
+        margin: auto;
+        margin-top: 100px;
 
-        /* Glow futuristik */
         border: 1px solid #999;
         box-shadow: 0 0 10px rgba(0,0,0,0.2),
                     0 0 20px rgba(255,255,255,0.3);
 
-        /* Animasi masuk */
         opacity: 0;
         transform: translateY(40px);
         animation: fadeIn 1s ease forwards;
@@ -41,18 +77,6 @@
         }
     }
 
-    h1 {
-        margin-bottom: 5px;
-        color: #222;
-        letter-spacing: 1px;
-    }
-
-    .author {
-        font-size: 13px;
-        color: #777;
-        margin-bottom: 20px;
-    }
-
     input {
         width: 90%;
         padding: 12px;
@@ -60,13 +84,6 @@
         border: 1px solid #bbb;
         margin-bottom: 15px;
         font-size: 15px;
-        outline: none;
-        transition: 0.3s;
-    }
-
-    input:focus {
-        border-color: black;
-        box-shadow: 0 0 8px rgba(0,0,0,0.3);
     }
 
     button {
@@ -76,101 +93,129 @@
         padding: 10px 22px;
         border-radius: 10px;
         cursor: pointer;
-        font-size: 15px;
-        transition: 0.3s;
     }
 
     button:hover {
         background: white;
         color: black;
-        border: 1px solid black;
     }
 
     .result {
         margin-top: 20px;
         font-size: 18px;
         font-weight: 500;
-        opacity: 0;
-        transform: translateY(10px);
-        transition: 0.3s;
     }
 
-    .show {
-        opacity: 1;
-        transform: translateY(0);
+    /* MODAL */
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: rgba(0,0,0,0.6);
+        justify-content: center;
+        align-items: center;
     }
 
-    .valid {
-        color: #2e7d32;
-    }
-
-    .invalid {
-        color: #c62828;
-    }
-
-    #history {
-        margin-top: 15px;
-        font-size: 12px;
-        color: #555;
-        max-height: 80px;
-        overflow-y: auto;
-        border-top: 1px solid #ddd;
-        padding-top: 10px;
+    .modal-content {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        text-align: center;
     }
 </style>
 </head>
 
 <body>
 
+<!-- NAVBAR -->
+<div class="navbar">
+    <div class="menu">File
+        <div class="dropdown">
+            <div onclick="downloadHistory()">Download History</div>
+        </div>
+    </div>
+
+    <div class="menu" onclick="openAbout()">About Me</div>
+</div>
+
+<!-- MAIN -->
 <div class="container">
     <h1>Input Validator</h1>
-    <div class="author">Swingly Moningka - 241011060046</div>
 
     <input type="text" id="input" placeholder="Type something here...">
     <br>
     <button onclick="checkInput()">Check</button>
 
     <div class="result" id="result"></div>
-    <div id="history"></div>
+</div>
+
+<!-- MODAL ABOUT -->
+<div class="modal" id="aboutModal">
+    <div class="modal-content">
+        <h2>About Me</h2>
+        <p>Name: Swingly Moningka</p>
+        <p>NIM: 241011060046</p>
+        <p>Class: Information System 24</p>
+        <br>
+        <button onclick="closeAbout()">Close</button>
+    </div>
 </div>
 
 <script>
+let historyData = [];
+
 function checkInput() {
     let inputField = document.getElementById("input");
-    let result = document.getElementById("result");
-    let historyDiv = document.getElementById("history");
     let value = inputField.value;
+    let result = document.getElementById("result");
 
     if (value.trim() === "") return;
 
-    // Animasi checking
     result.innerText = "Checking...";
-    result.className = "result show";
 
     setTimeout(() => {
+        let output;
+
         if (!isNaN(value)) {
-            result.innerText = "This is a number.";
-            result.className = "result valid show";
+            output = value + " → Number";
         } else {
-            result.innerText = "This is not a number.";
-            result.className = "result invalid show";
+            output = value + " → Not a Number";
         }
 
-        // Tambah ke history
-        historyDiv.innerHTML += value + "<br>";
+        result.innerText = output;
+        historyData.push(output);
 
-    }, 500);
+    }, 400);
 
-    // Kosongkan input
     inputField.value = "";
 }
 
-// ENTER buat check
+// ENTER support
 document.getElementById("input").addEventListener("keypress", function(e) {
     if (e.key === "Enter") {
         checkInput();
     }
 });
+
+// DOWNLOAD FILE
+function downloadHistory() {
+    let content = historyData.join("\n");
+    let blob = new Blob([content], { type: "text/plain" });
+    let a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "history.txt";
+    a.click();
+}
+
+// ABOUT MODAL
+function openAbout() {
+    document.getElementById("aboutModal").style.display = "flex";
+}
+
+function closeAbout() {
+    document.getElementById("aboutModal").style.display = "none";
+}
 </script>
 
 </body>
