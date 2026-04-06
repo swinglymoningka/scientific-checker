@@ -10,23 +10,46 @@ body {
     margin: 0;
     font-family: 'Segoe UI', sans-serif;
     height: 100vh;
-    background: linear-gradient(135deg, #0f0f1a, #1a1a40, #3a0ca3);
     display: flex;
     justify-content: center;
     align-items: center;
+
+    /* ANIMATED BACKGROUND */
+    background: linear-gradient(-45deg, #0f0f1a, #1a1a40, #3a0ca3, #7209b7);
+    background-size: 400% 400%;
+    animation: gradientMove 10s ease infinite;
+}
+
+@keyframes gradientMove {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
 }
 
 /* CARD */
 .container {
     width: 90%;
     max-width: 400px;
-    background: rgba(255,255,255,0.08);
-    backdrop-filter: blur(15px);
-    border-radius: 18px;
     padding: 25px;
+    border-radius: 18px;
     text-align: center;
-    border: 1px solid rgba(255,255,255,0.2);
-    box-shadow: 0 0 25px rgba(58,12,163,0.5);
+
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(15px);
+
+    /* GLOW BORDER */
+    border: 2px solid transparent;
+    background-clip: padding-box;
+    box-shadow: 0 0 20px rgba(114,9,183,0.5),
+                0 0 40px rgba(58,12,163,0.4);
+
+    animation: glowPulse 2.5s infinite;
+}
+
+@keyframes glowPulse {
+    0% { box-shadow: 0 0 15px rgba(114,9,183,0.4); }
+    50% { box-shadow: 0 0 30px rgba(58,12,163,0.8); }
+    100% { box-shadow: 0 0 15px rgba(114,9,183,0.4); }
 }
 
 /* MENU */
@@ -34,19 +57,22 @@ body {
     display: flex;
     justify-content: space-around;
     margin-bottom: 15px;
-    color: #ccc;
-    font-size: 14px;
+    color: #aaa;
 }
 
 .menu span {
     cursor: pointer;
+    transition: 0.3s;
+}
+
+.menu span:hover {
+    color: white;
 }
 
 /* TITLE */
 h1 {
     color: white;
     font-size: 20px;
-    margin-bottom: 15px;
 }
 
 /* INPUT */
@@ -60,15 +86,27 @@ input {
     border-radius: 10px;
     border: none;
     margin-bottom: 10px;
+    background: rgba(255,255,255,0.1);
+    color: white;
 }
 
+input::placeholder {
+    color: #ccc;
+}
+
+/* BUTTON */
 button {
     padding: 12px;
     border-radius: 10px;
     border: none;
-    background: #7209b7;
+    background: linear-gradient(45deg, #7209b7, #3a0ca3);
     color: white;
     cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    transform: scale(1.05);
 }
 
 /* RESULT */
@@ -76,18 +114,12 @@ button {
     margin-top: 15px;
     font-size: 16px;
     font-weight: bold;
+    transition: 0.3s;
 }
 
-/* COLORS */
-.valid {
-    color: #4caf50;
-}
-.decimal {
-    color: #2196f3;
-}
-.invalid {
-    color: #f44336;
-}
+.valid { color: #00ffae; }
+.decimal { color: #4cc9f0; }
+.invalid { color: #ff4d6d; }
 </style>
 </head>
 
@@ -118,10 +150,7 @@ function runCheck() {
     let input = document.getElementById("input").value.trim();
     let result = document.getElementById("result");
 
-    // Scientific Notation
     let sciRegex = /^[+-]?(\d+(\.\d+)?|\.\d+)\s*x\s*10\^[-+]?\d+$/i;
-
-    // Decimal Number
     let decRegex = /^[+-]?(\d+(\.\d+)?|\.\d+)$/;
 
     if (sciRegex.test(input)) {
@@ -141,22 +170,18 @@ function runCheck() {
     }
 }
 
-// ENTER SUPPORT
 document.getElementById("input").addEventListener("keypress", function(e) {
     if (e.key === "Enter") runCheck();
 });
 
-// FILE
 function downloadHistory() {
-    let content = historyData.join("\n");
-    let blob = new Blob([content], { type: "text/plain" });
+    let blob = new Blob([historyData.join("\n")], { type: "text/plain" });
     let a = document.createElement("a");
     a.href = URL.createObjectURL(blob);
     a.download = "result.txt";
     a.click();
 }
 
-// ABOUT
 function showAbout() {
     alert("Swingly Moningka\n241011060046\nInformation System 24");
 }
