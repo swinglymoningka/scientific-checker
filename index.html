@@ -55,6 +55,15 @@ body {
 h1 {
     color: white;
     font-size: 22px;
+    margin-bottom: 5px;
+}
+
+/* IDENTITY (Nama & NIM) */
+.identity {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 14px;
+    margin-bottom: 20px;
+    letter-spacing: 0.5px;
 }
 
 /* INPUT */
@@ -70,6 +79,7 @@ input {
     margin-bottom: 10px;
     background: rgba(255,255,255,0.1);
     color: white;
+    outline: none;
 }
 
 button {
@@ -79,6 +89,13 @@ button {
     background: linear-gradient(45deg, #7209b7, #3a0ca3);
     color: white;
     cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+button:hover {
+    transform: scale(1.02);
+    box-shadow: 0 0 15px #4361ee;
 }
 
 /* RESULT */
@@ -86,11 +103,12 @@ button {
     margin-top: 15px;
     font-size: 16px;
     font-weight: bold;
+    min-height: 20px;
 }
 
-.valid { color: #00ffae; }
-.decimal { color: #4cc9f0; }
-.invalid { color: #ff4d6d; }
+.valid { color: #00ffae; text-shadow: 0 0 5px #00ffae; }
+.decimal { color: #4cc9f0; text-shadow: 0 0 5px #4cc9f0; }
+.invalid { color: #ff4d6d; text-shadow: 0 0 5px #ff4d6d; }
 
 /* UI DALAM UI */
 .example-wrapper {
@@ -105,21 +123,23 @@ button {
     border-radius: 10px;
     background: rgba(255,255,255,0.08);
     border: 1px solid rgba(255,255,255,0.2);
-    font-size: 12px;
+    font-size: 11px;
     color: #ddd;
+    text-align: left;
 }
 
 .example-box b {
     display: block;
     margin-bottom: 5px;
+    font-size: 12px;
 }
 
 .valid-box {
-    box-shadow: 0 0 10px rgba(0,255,174,0.5);
+    box-shadow: 0 0 10px rgba(0,255,174,0.3);
 }
 
 .invalid-box {
-    box-shadow: 0 0 10px rgba(255,77,109,0.5);
+    box-shadow: 0 0 10px rgba(255,77,109,0.3);
 }
 </style>
 </head>
@@ -129,6 +149,7 @@ button {
 <div class="container">
 
     <h1>Scientific Notation Checker</h1>
+    <div class="identity">Swingly Moningka | 241011060046</div>
 
     <input type="text" id="input" placeholder="Example: -3.1 x 10^-3">
 
@@ -136,7 +157,6 @@ button {
 
     <div id="result"></div>
 
-    <!-- UI DALAM UI -->
     <div class="example-wrapper">
 
         <div class="example-box valid-box">
@@ -162,8 +182,15 @@ function runCheck() {
     let input = document.getElementById("input").value.trim();
     let result = document.getElementById("result");
 
+    // Regex untuk Notasi Ilmiah (m x 10^n)
     let sciRegex = /^[+-]?(\d+(\.\d+)?|\.\d+)\s*x\s*10\^[-+]?\d+$/i;
+    // Regex untuk angka desimal biasa
     let decRegex = /^[+-]?(\d+(\.\d+)?|\.\d+)$/;
+
+    if (input === "") {
+        result.innerText = "";
+        return;
+    }
 
     if (sciRegex.test(input)) {
         result.innerText = "Valid Scientific Notation";
