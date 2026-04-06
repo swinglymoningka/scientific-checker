@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Scientific Notation Checker</title>
+<title>Scientific Notation Scanner</title>
 
 <style>
 body {
-    font-family: 'Segoe UI', sans-serif;
     margin: 0;
+    font-family: 'Segoe UI', sans-serif;
     height: 100vh;
-    background: linear-gradient(135deg, #1b1b2f, #16213e, #3a0ca3);
+    background: linear-gradient(135deg, #0f0f1a, #1a1a40, #3a0ca3);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -18,33 +18,35 @@ body {
 
 /* CARD */
 .container {
-    background: rgba(255,255,255,0.15);
-    backdrop-filter: blur(12px);
-    padding: 20px;
-    border-radius: 16px;
     width: 90%;
-    max-width: 380px;
+    max-width: 400px;
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(15px);
+    border-radius: 18px;
+    padding: 25px;
     text-align: center;
-
-    border: 1px solid rgba(255,255,255,0.3);
+    border: 1px solid rgba(255,255,255,0.2);
+    box-shadow: 0 0 25px rgba(58,12,163,0.5);
 }
 
 /* MENU */
 .menu {
     display: flex;
     justify-content: space-around;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
+    color: #ccc;
+    font-size: 14px;
 }
 
 .menu span {
-    color: white;
     cursor: pointer;
 }
 
 /* TITLE */
 h1 {
     color: white;
-    font-size: 18px;
+    font-size: 20px;
+    margin-bottom: 15px;
 }
 
 /* INPUT */
@@ -61,18 +63,30 @@ input {
 }
 
 button {
-    background: #7209b7;
-    color: white;
     padding: 12px;
     border-radius: 10px;
     border: none;
+    background: #7209b7;
+    color: white;
+    cursor: pointer;
 }
 
 /* RESULT */
 #result {
     margin-top: 15px;
-    font-size: 18px;
-    color: white;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+/* COLORS */
+.valid {
+    color: #4caf50;
+}
+.decimal {
+    color: #2196f3;
+}
+.invalid {
+    color: #f44336;
 }
 </style>
 </head>
@@ -83,16 +97,15 @@ button {
 
     <div class="menu">
         <span onclick="downloadHistory()">File</span>
-        <span onclick="alert('Edit menu (optional)')">Edit</span>
-        <span onclick="checkScientific()">Run</span>
+        <span onclick="runCheck()">Run</span>
         <span onclick="showAbout()">About</span>
     </div>
 
-    <h1>Scientific Notation Checker</h1>
+    <h1>Scientific Notation Scanner</h1>
 
     <input type="text" id="input" placeholder="Example: -3.1 x 10^-3">
 
-    <button onclick="checkScientific()">Check</button>
+    <button onclick="runCheck()">Check</button>
 
     <div id="result"></div>
 
@@ -101,28 +114,39 @@ button {
 <script>
 let historyData = [];
 
-function checkScientific() {
+function runCheck() {
     let input = document.getElementById("input").value.trim();
     let result = document.getElementById("result");
 
-    // REGEX SCIENTIFIC NOTATION
-    let regex = /^[+-]?(\d+(\.\d+)?|\.\d+)\s*x\s*10\^[-+]?\d+$/i;
+    // Scientific Notation
+    let sciRegex = /^[+-]?(\d+(\.\d+)?|\.\d+)\s*x\s*10\^[-+]?\d+$/i;
 
-    if (regex.test(input)) {
-        result.innerText = "Yes";
-        historyData.push(input + " → Yes");
-    } else {
-        result.innerText = "No";
-        historyData.push(input + " → No");
+    // Decimal Number
+    let decRegex = /^[+-]?(\d+(\.\d+)?|\.\d+)$/;
+
+    if (sciRegex.test(input)) {
+        result.innerText = "Valid Scientific Notation";
+        result.className = "valid";
+        historyData.push(input + " → Scientific");
+    }
+    else if (decRegex.test(input)) {
+        result.innerText = "Decimal Number (Not Scientific)";
+        result.className = "decimal";
+        historyData.push(input + " → Decimal");
+    }
+    else {
+        result.innerText = "Invalid Input or Format";
+        result.className = "invalid";
+        historyData.push(input + " → Invalid");
     }
 }
 
 // ENTER SUPPORT
 document.getElementById("input").addEventListener("keypress", function(e) {
-    if (e.key === "Enter") checkScientific();
+    if (e.key === "Enter") runCheck();
 });
 
-// FILE DOWNLOAD
+// FILE
 function downloadHistory() {
     let content = historyData.join("\n");
     let blob = new Blob([content], { type: "text/plain" });
